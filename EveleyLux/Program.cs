@@ -15,6 +15,8 @@ namespace EveleyLux
         public static SpellSlot igniteslot_;
         //public static SpellSlot barrierslot_; need to find name
         public static Orbwalking.Orbwalker orbwalker_;
+        //public static Vector3 castpos; Usefull for later i think
+        public static GameObject lgo_;
         static void Main(string[] args)
         {
             if (ObjectManager.Player.BaseSkinName == "Lux")
@@ -66,6 +68,8 @@ namespace EveleyLux
             drawing.AddItem(new MenuItem("rdr", "R range").SetValue(new Circle()));
 
             Game.OnUpdate += Game_OnGameUpdate;
+            GameObject.OnDelete += GameObject_OnDelete;
+            GameObject.OnCreate += GameObject_OnCreate;
             Drawing.OnDraw += OnDraw;
         }
         private static void OnDraw(EventArgs args)
@@ -122,8 +126,34 @@ namespace EveleyLux
         private static void Harass()
         {
             var ts = TargetSelector.GetTarget(q_.Range, TargetSelector.DamageType.Magical);
-            if (ts == null)
+            var qpred = q_.GetPrediction(ts);
+            var qcoll = q_.GetCollision(ObjectManager.Player.ServerPosition.To2D(), new List<Vector2> { qpred.CastPosition.To2D() });
+            var mincoll = qcoll.Where(x => !(x is Obj_AI_Hero)).Count(x => x.IsMinion);
+            if (ts == null || ts.IsInvulnerable)
                 return;
+            //if (e_.IsReady() && ts.IsValidTarget(r_.Range) && menu_.Item("heu").GetValue<bool>()) ELogic(); //In create
+
+        }
+        private static void Elogic()
+        {
+            var ts = TargetSelector.GetTarget(e_.Range + e_.Width, TargetSelector.DamageType.Magical);
+            var epred = e_.GetPrediction(ts);
+
+        }
+        public static void GameObject_OnDelete(GameObject sender, EventArgs args)
+        {
+            if (sender.Name == "Lux_Base_E_tar_nova.troy")
+            {
+                lgo_ = null;
+            }
+        }
+
+        public static void GameObject_OnCreate(GameObject sender, EventArgs args)
+        {
+            if (sender.Name == "Lux_Base_E_mis.troy")
+            {
+                lgo_ = sender;
+            }
         }
         private static void Game_OnGameUpdate(EventArgs args)
         {
