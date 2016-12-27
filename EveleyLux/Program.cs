@@ -48,6 +48,7 @@ namespace EveleyLux
             orbwalker_ = new Orbwalking.Orbwalker(menu_.AddSubMenu(new Menu("Orbwalker", "Orbwalker")));
             TargetSelector.AddToMenu(menu_.AddSubMenu(new Menu("Target Selector", "Target Selector")));
             var laneclear = menu_.AddSubMenu(new Menu("Laneclear", "Laneclear"));
+            var harass = menu_.AddSubMenu(new Menu("Harass", "Harass"));
             var drawing = menu_.AddSubMenu(new Menu("Drawing", "Drawing"));
             laneclear.AddItem(new MenuItem("lqu", "Use Q").SetValue(true));
             laneclear.AddItem(new MenuItem("lwu", "Use W with very low HP").SetValue(false));
@@ -55,6 +56,10 @@ namespace EveleyLux
             laneclear.AddItem(new MenuItem("lru", "Use R").SetValue(false));
             //laneclear.AddItem(new MenuItem("lquc", "Q Minion Number").SetValue(true));
             //laneclear.AddItem(new MenuItem("leuc", "E Minion Count").SetValue(true));
+            harass.AddItem(new MenuItem("autoh", "AutoHarass Toggle").SetValue(new KeyBind('L', KeyBindType.Toggle)));
+            harass.AddItem(new MenuItem("hqu", "Use Q").SetValue(true));
+            harass.AddItem(new MenuItem("hqsu", "Use Q only on CC").SetValue(false));
+            harass.AddItem(new MenuItem("heu", "Use E").SetValue(true));
             drawing.AddItem(new MenuItem("qdr", "Q range").SetValue(new Circle()));
             drawing.AddItem(new MenuItem("wdr", "W range").SetValue(new Circle()));
             drawing.AddItem(new MenuItem("edr", "E range").SetValue(new Circle()));
@@ -113,6 +118,12 @@ namespace EveleyLux
                     ObjectManager.Player.IssueOrder(GameObjectOrder.AutoAttack, minion);
                 }
             }
+        }
+        private static void Harass()
+        {
+            var ts = TargetSelector.GetTarget(q_.Range, TargetSelector.DamageType.Magical);
+            if (ts == null)
+                return;
         }
         private static void Game_OnGameUpdate(EventArgs args)
         {
