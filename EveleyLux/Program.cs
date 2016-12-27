@@ -149,11 +149,11 @@ namespace EveleyLux
             if (ts.IsInvulnerable || (ts.HasBuff("luxilluminatingfraulein") && ts.HasBuff("LuxLightBindingMis") && ObjectManager.Player.Distance(ts.Position) <= Orbwalking.GetRealAutoAttackRange(ObjectManager.Player)))
                 return;
             if (lgo_ != null && (lgo_.Position.CountEnemiesInRange(300) >= 1 || ts.HasBuffOfType(BuffType.Slow)))
-                e_.Cast(); 
+                e_.Cast(ts); 
             if (lgo_ != null)
                 return;
             if (epred.Hitchance >= HitChance.VeryHigh)
-                e_.Cast();
+                e_.Cast(ts);
         }
         public static void GameObject_OnDelete(GameObject sender, EventArgs args)
         {
