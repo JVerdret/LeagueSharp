@@ -131,14 +131,23 @@ namespace EveleyLux
             var mincoll = qcoll.Where(x => !(x is Obj_AI_Hero)).Count(x => x.IsMinion);
             if (ts == null || ts.IsInvulnerable)
                 return;
-            //if (e_.IsReady() && ts.IsValidTarget(r_.Range) && menu_.Item("heu").GetValue<bool>()) ELogic(); //In create
+            if (e_.IsReady() && ts.IsValidTarget(r_.Range) && menu_.Item("heu").GetValue<bool>())
+                harassElogic(); 
 
         }
-        private static void Elogic()
+        private static void harassElogic()
         {
             var ts = TargetSelector.GetTarget(e_.Range + e_.Width, TargetSelector.DamageType.Magical);
             var epred = e_.GetPrediction(ts);
-
+            if (lgo_ != null && e_.IsReady() && lgo_.Position.CountEnemiesInRange(e_.Width) < 1) Utility.DelayAction.Add(2000, () => e_.Cast());
+            if (ts.IsInvulnerable || (ts.HasBuff("luxilluminatingfraulein") && ts.HasBuff("LuxLightBindingMis") && ObjectManager.Player.Distance(ts.Position) <= Orbwalking.GetRealAutoAttackRange(ObjectManager.Player)))
+                return;
+            if (lgo_ != null && (lgo_.Position.CountEnemiesInRange(300) >= 1 || ts.HasBuffOfType(BuffType.Slow)))
+                e_.Cast(); 
+            if (lgo_ != null)
+                return;
+            if (epred.Hitchance >= HitChance.VeryHigh)
+                e_.Cast();
         }
         public static void GameObject_OnDelete(GameObject sender, EventArgs args)
         {
