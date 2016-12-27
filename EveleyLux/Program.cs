@@ -59,7 +59,7 @@ namespace EveleyLux
             drawing.AddItem(new MenuItem("edr", "E range").SetValue(new Circle()));
             drawing.AddItem(new MenuItem("rdr", "R range").SetValue(new Circle()));
 
-
+            Game.OnUpdate += Game_OnGameUpdate;
             Drawing.OnDraw += OnDraw;
         }
         private static void OnDraw(EventArgs args)
@@ -78,6 +78,33 @@ namespace EveleyLux
                 Render.Circle.DrawCircle(ObjectManager.Player.Position, 3340, System.Drawing.Color.BlueViolet);
 
 
+        }
+        private static void LaneClear()
+        {
+            var allMinionsQ = MinionManager.GetMinions(ObjectManager.Player.ServerPosition, q_.Range);
+            var allMinionsE = MinionManager.GetMinions(ObjectManager.Player.ServerPosition, e_.Range);
+            var minions = MinionManager.GetMinions(e_.Range, MinionTypes.All, MinionTeam.Enemy).Where(m => m.IsValid && m.Distance(ObjectManager.Player) < e_.Range).ToList();
+            var aaminions = MinionManager.GetMinions(e_.Range, MinionTypes.All, MinionTeam.Enemy).Where(m => m.IsValid && m.Distance(ObjectManager.Player) < Orbwalking.GetRealAutoAttackRange(ObjectManager.Player)).ToList();
+            var efarmpos = e_.GetCircularFarmLocation(new List<Obj_AI_Base>(minions), e_.Width);
+            var qfarmpos = q_.GetLineFarmLocation(new List<Obj_AI_Base>(minions), q_.Width);
+            if (efarmpos.MinionsHit >= 3 && e_.IsReady() && menu_.Item("leu").GetValue<bool>()) e_.Cast(efarmpos.Position);
+            if (qfarmpos.MinionsHit == 2  && q_.IsReady() && menu_.Item("lqu").GetValue<bool>()) q_.Cast(qfarmpos.Position);
+            foreach (var minion in aaminions.Where(m => m.IsMinion && !m.IsDead && m.HasBuff("luxilluminatingfraulein")))
+            {
+                if (minion.IsValid)
+                {
+                    ObjectManager.Player.IssueOrder(GameObjectOrder.AutoAttack, minion);
+                }
+            }
+        }
+        private static void Game_OnGameUpdate(EventArgs args)
+        {
+            switch (orbwalker_.ActiveMode)
+            {
+                case Orbwalking.OrbwalkingMode.LaneClear:
+                    LaneClear();
+                    break;
+            }
         }
     }
 }
