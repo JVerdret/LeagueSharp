@@ -59,13 +59,13 @@ namespace EveleyLux
             var drawW = menu_.Item("wdr").GetValue<Circle>();
             var drawE = menu_.Item("edr").GetValue<Circle>();
             var drawR = menu_.Item("rdr").GetValue<Circle>();
-            if (drawQ.Active)
+            if (drawQ.Active && q_.Level > 0)
                 Render.Circle.DrawCircle(ObjectManager.Player.Position, 1175, System.Drawing.Color.Aqua);
-            if (drawW.Active)
+            if (drawW.Active && w_.Level > 0)
                 Render.Circle.DrawCircle(ObjectManager.Player.Position, 1075, System.Drawing.Color.Azure);
-            if (drawE.Active)
+            if (drawE.Active && e_.Level > 0)
                 Render.Circle.DrawCircle(ObjectManager.Player.Position, 1100, System.Drawing.Color.Blue);
-            if (drawE.Active)
+            if (drawE.Active && r_.Level > 0)
                 Render.Circle.DrawCircle(ObjectManager.Player.Position, 3340, System.Drawing.Color.BlueViolet);
 
 
