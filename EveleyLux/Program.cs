@@ -19,7 +19,7 @@ namespace EveleyLux
         {
             if (ObjectManager.Player.BaseSkinName == "Lux")
             {
-                Game.PrintChat("EveleyLux Loadedd");
+                Game.PrintChat("EveleyLux Loaded");
                 CustomEvents.Game.OnGameLoad += Game_OnGameLoad;
             }
             else
@@ -50,8 +50,9 @@ namespace EveleyLux
             var laneclear = menu_.AddSubMenu(new Menu("Laneclear", "Laneclear"));
             var drawing = menu_.AddSubMenu(new Menu("Drawing", "Drawing"));
             laneclear.AddItem(new MenuItem("lqu", "Use Q").SetValue(true));
-            laneclear.AddItem(new MenuItem("lwu", "Use W with very low HP").SetValue(true));
+            laneclear.AddItem(new MenuItem("lwu", "Use W with very low HP").SetValue(false));
             laneclear.AddItem(new MenuItem("leu", "Use E").SetValue(true));
+            laneclear.AddItem(new MenuItem("lru", "Use R").SetValue(false));
             //laneclear.AddItem(new MenuItem("lquc", "Q Minion Number").SetValue(true));
             //laneclear.AddItem(new MenuItem("leuc", "E Minion Count").SetValue(true));
             drawing.AddItem(new MenuItem("qdr", "Q range").SetValue(new Circle()));
@@ -76,19 +77,21 @@ namespace EveleyLux
                 Render.Circle.DrawCircle(ObjectManager.Player.Position, 1100, System.Drawing.Color.Blue);
             if (drawE.Active && r_.Level > 0)
                 Render.Circle.DrawCircle(ObjectManager.Player.Position, 3340, System.Drawing.Color.BlueViolet);
-
-
         }
         private static void LaneClear()
         {
             var allMinionsQ = MinionManager.GetMinions(ObjectManager.Player.ServerPosition, q_.Range);
             var allMinionsE = MinionManager.GetMinions(ObjectManager.Player.ServerPosition, e_.Range);
+            var allMinionsR = MinionManager.GetMinions(ObjectManager.Player.ServerPosition, r_.Range);
             var minions = MinionManager.GetMinions(e_.Range, MinionTypes.All, MinionTeam.Enemy).Where(m => m.IsValid && m.Distance(ObjectManager.Player) < e_.Range).ToList();
+            var rminions = MinionManager.GetMinions(r_.Range, MinionTypes.All, MinionTeam.Enemy).Where(m => m.IsValid && m.Distance(ObjectManager.Player) < r_.Range).ToList();
             var aaminions = MinionManager.GetMinions(e_.Range, MinionTypes.All, MinionTeam.Enemy).Where(m => m.IsValid && m.Distance(ObjectManager.Player) < Orbwalking.GetRealAutoAttackRange(ObjectManager.Player)).ToList();
             var efarmpos = e_.GetCircularFarmLocation(new List<Obj_AI_Base>(minions), e_.Width);
             var qfarmpos = q_.GetLineFarmLocation(new List<Obj_AI_Base>(minions), q_.Width);
+            var rfarmpos = r_.GetLineFarmLocation(new List<Obj_AI_Base>(rminions), r_.Width);
             if (efarmpos.MinionsHit >= 3 && e_.IsReady() && menu_.Item("leu").GetValue<bool>()) e_.Cast(efarmpos.Position);
             if (qfarmpos.MinionsHit == 2  && q_.IsReady() && menu_.Item("lqu").GetValue<bool>()) q_.Cast(qfarmpos.Position);
+            if (rfarmpos.MinionsHit >= 9 && r_.IsReady() && menu_.Item("lru").GetValue<bool>()) r_.Cast(rfarmpos.Position);
             foreach (var minion in aaminions.Where(m => m.IsMinion && !m.IsDead && m.HasBuff("luxilluminatingfraulein")))
             {
                 if (minion.IsValid)
