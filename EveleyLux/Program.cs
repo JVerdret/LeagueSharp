@@ -20,12 +20,12 @@ namespace EveleyLux
         {
             if (ObjectManager.Player.BaseSkinName == "Lux")
             {
-                Game.PrintChat("EveleyLux Loaded");
+                Game.PrintChat("EveleyLux Loadedd");
                 CustomEvents.Game.OnGameLoad += Game_OnGameLoad;
             }
             else
             {
-                Game.PrintChat("It's absolutly not a magical girl ! ");
+                Game.PrintChat("It's absolutly not Lux ! ");
                 Game.PrintChat("EveleyLux has not been loaded");
                 return;
             }
@@ -47,14 +47,28 @@ namespace EveleyLux
             orbwalker_ = new Orbwalking.Orbwalker(menu_.AddSubMenu(new Menu("Orbwalker", "Orbwalker")));
             TargetSelector.AddToMenu(menu_.AddSubMenu(new Menu("Target Selector", "Target Selector")));
             var drawing = menu_.AddSubMenu(new Menu("Drawing", "Drawing"));
-            drawing.AddItem(new MenuItem("qdr", "Q range").SetValue(true));
-            drawing.AddItem(new MenuItem("wdr", "W range").SetValue(false));
-            drawing.AddItem(new MenuItem("edr", "E range").SetValue(true));
-            drawing.AddItem(new MenuItem("rdr", "R range").SetValue(true));
+            drawing.AddItem(new MenuItem("qdr", "Q range").SetValue(new Circle()));
+            drawing.AddItem(new MenuItem("wdr", "W range").SetValue(new Circle()));
+            drawing.AddItem(new MenuItem("edr", "E range").SetValue(new Circle()));
+            drawing.AddItem(new MenuItem("rdr", "R range").SetValue(new Circle()));
+            Drawing.OnDraw += OnDraw;
         }
         private static void OnDraw(EventArgs args)
         {
-            
+            var drawQ = menu_.Item("qdr").GetValue<Circle>();
+            var drawW = menu_.Item("wdr").GetValue<Circle>();
+            var drawE = menu_.Item("edr").GetValue<Circle>();
+            var drawR = menu_.Item("rdr").GetValue<Circle>();
+            if (drawQ.Active)
+                Render.Circle.DrawCircle(ObjectManager.Player.Position, 1175, System.Drawing.Color.Aqua);
+            if (drawW.Active)
+                Render.Circle.DrawCircle(ObjectManager.Player.Position, 1075, System.Drawing.Color.Azure);
+            if (drawE.Active)
+                Render.Circle.DrawCircle(ObjectManager.Player.Position, 1100, System.Drawing.Color.Blue);
+            if (drawE.Active)
+                Render.Circle.DrawCircle(ObjectManager.Player.Position, 3340, System.Drawing.Color.BlueViolet);
+
+
         }
     }
 }
