@@ -132,8 +132,14 @@ namespace EveleyLux
             if (ts == null || ts.IsInvulnerable)
                 return;
             if (e_.IsReady() && ts.IsValidTarget(r_.Range) && menu_.Item("heu").GetValue<bool>())
-                harassElogic(); 
-
+                harassElogic();
+            if (ts.IsValidTarget(q_.Range) && mincoll <= 1 && menu_.Item("hqu").GetValue<bool>() && qpred.Hitchance >= HitChance.VeryHigh
+                && (ts.HasBuffOfType(BuffType.Slow) || ts.HasBuffOfType(BuffType.Stun) || ts.HasBuffOfType(BuffType.Snare)))
+                q_.Cast(ts);
+            if (menu_.Item("hqsu").GetValue<bool>())
+                return;
+            if (ts.IsValidTarget(q_.Range) && mincoll <= 1 && menu_.Item("hqu").GetValue<bool>() && qpred.Hitchance >= HitChance.VeryHigh)
+                q_.Cast(ts);
         }
         private static void harassElogic()
         {
@@ -168,6 +174,9 @@ namespace EveleyLux
         {
             switch (orbwalker_.ActiveMode)
             {
+                case Orbwalking.OrbwalkingMode.Mixed:
+                    Harass();
+                    break;
                 case Orbwalking.OrbwalkingMode.LaneClear:
                     LaneClear();
                     break;
@@ -175,6 +184,8 @@ namespace EveleyLux
                     LastHit();
                     break;
             }
+            if (menu_.Item("").GetValue<KeyBind>().Active)
+                Harass();
         }
     }
 }
