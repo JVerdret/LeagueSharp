@@ -96,6 +96,7 @@ namespace EveleyLux
                     ObjectManager.Player.IssueOrder(GameObjectOrder.AutoAttack, minion);
                 }
             }
+            if (ObjectManager.Player.Health <= 100 && w_.IsReady() && menu_.Item("lwu").GetValue<bool>()) w_.Cast(ObjectManager.Player.ServerPosition);
         }
         private static void Game_OnGameUpdate(EventArgs args)
         {
