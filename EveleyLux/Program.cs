@@ -101,12 +101,28 @@ namespace EveleyLux
             }
             if (ObjectManager.Player.Health <= 100 && w_.IsReady() && menu_.Item("lwu").GetValue<bool>()) w_.Cast(ObjectManager.Player.ServerPosition);
         }
+        private static void LastHit()
+        {
+            var minione = MinionManager.GetMinions(ObjectManager.Player.ServerPosition, e_.Range + e_.Width);
+            foreach (var minion in minione.Where(a=>a.HasBuff("luxilluminatingfraulein")))
+            {
+                var passdmg = ObjectManager.Player.CalcDamage(minion, Damage.DamageType.Magical, 10 + (8 * ObjectManager.Player.Level) + 0.2 + ObjectManager.Player.FlatMagicDamageMod) + ObjectManager.Player.GetAutoAttackDamage(minion);
+                if (minion.Health < passdmg)
+                {
+                    orbwalker_.ForceTarget(minion);
+                    ObjectManager.Player.IssueOrder(GameObjectOrder.AutoAttack, minion);
+                }
+            }
+        }
         private static void Game_OnGameUpdate(EventArgs args)
         {
             switch (orbwalker_.ActiveMode)
             {
                 case Orbwalking.OrbwalkingMode.LaneClear:
                     LaneClear();
+                    break;
+                case Orbwalking.OrbwalkingMode.LastHit:
+                    LastHit();
                     break;
             }
         }
