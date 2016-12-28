@@ -76,6 +76,8 @@ namespace EveleyLux
             harass.AddItem(new MenuItem("autoh", "AutoHarass Toggle").SetValue(new KeyBind('L', KeyBindType.Toggle)));
             harass.AddItem(new MenuItem("hqu", "Use Q").SetValue(true));
             harass.AddItem(new MenuItem("hqsu", "Use Q only on CC").SetValue(false));
+            harass.AddItem(new MenuItem("hqfu", "Use Q on fear").SetValue(false));
+            harass.AddItem(new MenuItem("hqfc", "Use Q on charm").SetValue(false));
             harass.AddItem(new MenuItem("heu", "Use E").SetValue(true));
             drawing.AddItem(new MenuItem("qdr", "Q range").SetValue(new Circle()));
             drawing.AddItem(new MenuItem("wdr", "W range").SetValue(new Circle()));
@@ -149,7 +151,7 @@ namespace EveleyLux
             if (e_.IsReady() && ts.IsValidTarget(r_.Range) && menu_.Item("heu").GetValue<bool>())
                 harassElogic();
             if (ts.IsValidTarget(q_.Range) && mincoll <= 1 && menu_.Item("hqu").GetValue<bool>() && qpred.Hitchance >= HitChance.VeryHigh
-                && (ts.HasBuffOfType(BuffType.Slow) || ts.HasBuffOfType(BuffType.Stun) || ts.HasBuffOfType(BuffType.Snare)))
+                && (ts.HasBuffOfType(BuffType.Slow) || ts.HasBuffOfType(BuffType.Stun) || ts.HasBuffOfType(BuffType.Snare) || ts.HasBuffOfType(BuffType.Knockup) || ts.HasBuffOfType(BuffType.Suppression) || ts.HasBuffOfType(BuffType.Fear) || ts.HasBuffOfType(BuffType.Charm)))
                 q_.Cast(ts);
             if (menu_.Item("hqsu").GetValue<bool>())
                 return;
@@ -164,7 +166,7 @@ namespace EveleyLux
             if (ts.IsInvulnerable || (ts.HasBuff("luxilluminatingfraulein") && ts.HasBuff("LuxLightBindingMis") && ObjectManager.Player.Distance(ts.Position) <= Orbwalking.GetRealAutoAttackRange(ObjectManager.Player)))
                 return;
             if (lgo_ != null && (lgo_.Position.CountEnemiesInRange(300) >= 1 || ts.HasBuffOfType(BuffType.Slow)))
-                e_.Cast(ts); 
+                e_.Cast(ts);
             if (lgo_ != null)
                 return;
             if (epred.Hitchance >= HitChance.VeryHigh)
