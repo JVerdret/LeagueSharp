@@ -60,8 +60,8 @@ namespace EveleyLux
             combo.SubMenu("E Settings").AddItem(new MenuItem("ceu", "Use E").SetValue(true));
             combo.SubMenu("R Settings").AddItem(new MenuItem("semir", "Semi-Auto R").SetValue(new KeyBind('M', KeyBindType.Press)));
             combo.SubMenu("R Settings").AddItem(new MenuItem("cru", "Use R").SetValue(true));
-            combo.SubMenu("R Settings").AddItem(new MenuItem("craoeu", "Use AOE R").SetValue(false));
-            combo.SubMenu("R Settings").AddItem(new MenuItem("crehc", "Enemy Hit Count").SetValue(new Slider(3, 5, 1)));
+            combo.SubMenu("R Settings").AddItem(new MenuItem("craoeu", "Use Special R").SetValue(false));
+            combo.SubMenu("R Settings").AddItem(new MenuItem("crehc", "Ennemy Hits").SetValue(new Slider(3, 5, 1)));
             combo.SubMenu("R Settings").AddItem(new MenuItem("crq", "Auto R if Q").SetValue(false));
             combo.SubMenu("Summoners Settings").AddItem(new MenuItem("cui", "Use Ignite").SetValue(true));
             combo.SubMenu("Summoners Settings").AddItem(new MenuItem("cie", "Use Exhaust").SetValue(true));
