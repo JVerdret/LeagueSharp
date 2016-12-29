@@ -116,7 +116,8 @@ namespace EveleyLux
             var efarmpos = e_.GetCircularFarmLocation(new List<Obj_AI_Base>(minions), e_.Width);
             var qfarmpos = q_.GetLineFarmLocation(new List<Obj_AI_Base>(minions), q_.Width);
             var rfarmpos = r_.GetLineFarmLocation(new List<Obj_AI_Base>(rminions), r_.Width);
-            if (efarmpos.MinionsHit >= 3 && e_.IsReady() && menu_.Item("leu").GetValue<bool>()) e_.Cast(efarmpos.Position);
+            for (int minq = 9; minq > 2; minq--)
+                if (efarmpos.MinionsHit >= minq && e_.IsReady() && menu_.Item("leu").GetValue<bool>()) e_.Cast(efarmpos.Position);
             if (qfarmpos.MinionsHit == 2  && q_.IsReady() && menu_.Item("lqu").GetValue<bool>()) q_.Cast(qfarmpos.Position);
             if (rfarmpos.MinionsHit >= 9 && r_.IsReady() && menu_.Item("lru").GetValue<bool>()) r_.Cast(rfarmpos.Position);
             foreach (var minion in aaminions.Where(m => m.IsMinion && !m.IsDead && m.HasBuff("luxilluminatingfraulein")))
