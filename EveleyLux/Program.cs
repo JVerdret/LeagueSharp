@@ -210,6 +210,10 @@ namespace EveleyLux
             var lichdmg = ObjectManager.Player.CalcDamage(ts, Damage.DamageType.Magical, (ObjectManager.Player.BaseAttackDamage * 0.75) + ((ObjectManager.Player.BaseAbilityDamage + ObjectManager.Player.FlatMagicDamageMod) * 0.5));
             if (ts.IsValidTarget(q_.Range) && mincoll <= 1 && q_.IsReady() && qpred.Hitchance >= HitChance.VeryHigh && menu_.Item("cqu").GetValue<bool>())
                 q_.Cast(ts);
+            if (ts.IsValidTarget(e_.Range) && e_.IsReady() && menu_.Item("ceu").GetValue<bool>())
+                harassElogic();
+            if (ObjectManager.Player.Distance(ts.Position) <= 600 && CalcIgnite(ts) + e_.GetDamage(ts) >= ts.Health && ObjectManager.Player.HealthPercent <= 25 && menu_.Item("").GetValue<bool>() && ((e_.IsReady() && lgo_ == null) || (e_.IsReady() && lgo_ != null && ts.Distance(lgo_.Position) <= lgo_.BoundingRadius) || (q_.IsReady() && q_.GetPrediction(ts).Hitchance >= HitChance.High)))
+                ObjectManager.Player.Spellbook.CastSpell(igniteslot_, ts);
         }
         private static float CalcIgnite(Obj_AI_Hero ts)
         {
