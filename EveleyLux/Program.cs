@@ -228,6 +228,35 @@ namespace EveleyLux
                 return 0f;
             return (float)ObjectManager.Player.GetSummonerSpellDamage(ts, Damage.SummonerSpell.Ignite);
         }
+        public static bool qcast { get; set; }
+        private static void Rlogic()
+        {
+            {
+                if (!q_.IsReady())
+                    qcast = true;
+                Utility.DelayAction.Add(100, () => qcast = false);
+            }
+            igniteslot_ = ObjectManager.Player.GetSpellSlot("summonerdot");
+            var ts = TargetSelector.GetTarget(r_.Range, TargetSelector.DamageType.Magical);
+            if (ts == null || ts.IsInvulnerable || ts.HasBuff("caitlynaceinthehole"))
+                return;
+            var passdmg = ObjectManager.Player.CalcDamage(ts, Damage.DamageType.Magical, 10 + (8 * ObjectManager.Player.Level) + 0.2 * ObjectManager.Player.FlatMagicDamageMod);
+            var passaadmg = ObjectManager.Player.GetAutoAttackDamage(ObjectManager.Player) + passdmg;
+            if (ts.Health <= passaadmg && ts.HasBuff("luxilluminatingfraulein") && ObjectManager.Player.Distance(ts.Position) <= Orbwalking.GetRealAutoAttackRange(ObjectManager.Player))
+                return;
+            if (ts.Health <= q_.GetDamage(ts) && q_.GetPrediction(ts).Hitchance >= HitChance.VeryHigh && (q_.IsReady() || qcast))
+                return;
+            var rdmg = r_.GetDamage(ts);
+            var rpred = r_.GetPrediction(ts);
+            var rpdmg = rdmg + ObjectManager.Player.CalcDamage(ts, Damage.DamageType.Magical, 10 + (8 * ObjectManager.Player.Level) + 0.2 * ObjectManager.Player.FlatMagicDamageMod);
+            var rpidmg = rpdmg + CalcIgnite(ts);
+            var lichdmg = ObjectManager.Player.CalcDamage(ts, Damage.DamageType.Magical, (ObjectManager.Player.BaseAttackDamage * 0.75) + ((ObjectManager.Player.BaseAbilityDamage + ObjectManager.Player.FlatMagicDamageMod) * 0.5));
+            var cdmg = rdmg + e_.GetDamage(ts);
+            if (lgo_ != null && ts.IsValidTarget(r_.Range) && ts.Position.Distance(lgo_.Position) <= e_.Width && r_.IsReady() && ts.IsValidTarget(r_.Range) && rpred.Hitchance >= HitChance.VeryHigh && (ts.Health < cdmg + passdmg || ts.Health < cdmg + passdmg + CalcIgnite(ts)) && ts.HasBuff("LuxLightBindingMis")
+                || lgo_ != null && ts.IsValidTarget(r_.Range) && ObjectManager.Player.HasBuff("lichbane") && ObjectManager.Player.Distance(ts.Position) <= Orbwalking.GetRealAutoAttackRange(ObjectManager.Player) && ts.Position.Distance(lgo_.Position) <= e_.Width && r_.IsReady() /*h*/ && ts.IsValidTarget(r_.Range) && rpred.Hitchance >= HitChance.VeryHigh && ts.Health < cdmg + passdmg + lichdmg && ts.HasBuff("LuxLightBindingMis")
+                || lgo_ != null && ts.IsValidTarget(r_.Range) && ObjectManager.Player.HasBuff("lichbane") && ObjectManager.Player.Distance(ts.Position) <= Orbwalking.GetRealAutoAttackRange(ObjectManager.Player) && ts.Position.Distance(lgo_.Position) <= e_.Width && r_.IsReady() && igniteslot_.IsReady() && ts.IsValidTarget(r_.Range) && rpred.Hitchance >= HitChance.VeryHigh && ts.Health < cdmg + passdmg + lichdmg + CalcIgnite(ts) && ts.HasBuff("LuxLightBindingMis"))
+                r_.Cast(ts);
+        }
         private static void Game_OnGameUpdate(EventArgs args)
         {
             switch (orbwalker_.ActiveMode)
