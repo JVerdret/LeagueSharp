@@ -195,6 +195,28 @@ namespace EveleyLux
             if (w_.IsReady() && menu_.Item("autow").GetValue<bool>())
                 w_.Cast(Game.CursorPos);
         }
+
+        private static void Combo()
+        {
+            var ts = TargetSelector.GetTarget(q_.Range, TargetSelector.DamageType.Magical);
+            igniteslot_ = ObjectManager.Player.GetSpellSlot("summonerdot");
+            if (ts == null || ts.IsInvulnerable)
+                return;
+            var qpred = q_.GetPrediction(ts);
+            var qcoll = q_.GetCollision(ObjectManager.Player.ServerPosition.To2D(), new List<Vector2> { qpred.CastPosition.To2D() });
+            var mincoll = qcoll.Where(x => !(x is Obj_AI_Hero)).Count(x => x.IsMinion);
+            var passdmg = ObjectManager.Player.CalcDamage(ts, Damage.DamageType.Magical, 10 + (8 * ObjectManager.Player.Level) + 0.2 * ObjectManager.Player.FlatMagicDamageMod);
+            var passiveaadmg = ObjectManager.Player.GetAutoAttackDamage(ObjectManager.Player) + passdmg;
+            var lichdmg = ObjectManager.Player.CalcDamage(ts, Damage.DamageType.Magical, (ObjectManager.Player.BaseAttackDamage * 0.75) + ((ObjectManager.Player.BaseAbilityDamage + ObjectManager.Player.FlatMagicDamageMod) * 0.5));
+            if (ts.IsValidTarget(q_.Range) && mincoll <= 1 && q_.IsReady() && qpred.Hitchance >= HitChance.VeryHigh && menu_.Item("cqu").GetValue<bool>())
+                q_.Cast(ts);
+        }
+        private static float CalcIgnite(Obj_AI_Hero ts)
+        {
+            if (igniteslot_ == SpellSlot.Unknown || ObjectManager.Player.Spellbook.CanUseSpell(igniteslot_) != SpellState.Ready)
+                return 0f;
+            return (float)ObjectManager.Player.GetSummonerSpellDamage(ts, Damage.SummonerSpell.Ignite);
+        }
         private static void Game_OnGameUpdate(EventArgs args)
         {
             switch (orbwalker_.ActiveMode)
