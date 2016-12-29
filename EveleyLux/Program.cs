@@ -245,7 +245,7 @@ namespace EveleyLux
                     LastHit();
                     break;
             }
-            if (menu_.Item("").GetValue<KeyBind>().Active)
+            if (menu_.Item("autoh").GetValue<KeyBind>().Active)
                 Harass();
         }
     }
