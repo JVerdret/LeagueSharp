@@ -88,6 +88,7 @@ namespace EveleyLux
             GameObject.OnDelete += GameObject_OnDelete;
             GameObject.OnCreate += GameObject_OnCreate;
             Drawing.OnDraw += OnDraw;
+            Obj_AI_Base.OnProcessSpellCast += OnProcessSpellCast;
         }
         private static void OnDraw(EventArgs args)
         {
@@ -186,6 +187,13 @@ namespace EveleyLux
             {
                 lgo_ = sender;
             }
+        }
+        public static void OnProcessSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
+        {
+            if ((!w_.IsReady()) || (!args.Target.IsMe || sender.IsAlly || sender.IsMinion || sender == null))
+                return;
+            if (w_.IsReady() && menu_.Item("autow").GetValue<bool>())
+                w_.Cast(Game.CursorPos);
         }
         private static void Game_OnGameUpdate(EventArgs args)
         {
