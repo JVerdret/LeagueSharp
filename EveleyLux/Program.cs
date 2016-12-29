@@ -212,7 +212,13 @@ namespace EveleyLux
                 q_.Cast(ts);
             if (ts.IsValidTarget(e_.Range) && e_.IsReady() && menu_.Item("ceu").GetValue<bool>())
                 harassElogic();
-            if (ObjectManager.Player.Distance(ts.Position) <= 600 && CalcIgnite(ts) + e_.GetDamage(ts) >= ts.Health && ObjectManager.Player.HealthPercent <= 25 && menu_.Item("").GetValue<bool>() && ((e_.IsReady() && lgo_ == null) || (e_.IsReady() && lgo_ != null && ts.Distance(lgo_.Position) <= lgo_.BoundingRadius) || (q_.IsReady() && q_.GetPrediction(ts).Hitchance >= HitChance.High)))
+            if (ObjectManager.Player.Distance(ts.Position) <= 600 && CalcIgnite(ts) + e_.GetDamage(ts) >= ts.Health && ObjectManager.Player.HealthPercent <= 25 && menu_.Item("cui").GetValue<bool>() && ((e_.IsReady() && lgo_ == null) || (e_.IsReady() && lgo_ != null && ts.Distance(lgo_.Position) <= lgo_.BoundingRadius) || (q_.IsReady() && q_.GetPrediction(ts).Hitchance >= HitChance.High)))
+                ObjectManager.Player.Spellbook.CastSpell(igniteslot_, ts);
+            if (lgo_ != null && ts.Distance(lgo_.Position) <= e_.Width && ts.Health < e_.GetDamage(ts) || ts.HasBuff("LuxLightBindingMis") && ts.Health < passiveaadmg && ObjectManager.Player.Distance(ts.Position) <= Orbwalking.GetRealAutoAttackRange(ObjectManager.Player) && ts.HasBuff("luxilluminatingfraulein"))
+                return;
+            if (ObjectManager.Player.HasBuff("lichbane") && ts.Health < lichdmg && ObjectManager.Player.Distance(ts.Position) < Orbwalking.GetRealAutoAttackRange(ObjectManager.Player))
+                return;
+            if (ObjectManager.Player.Distance(ts.Position) <= 600 && CalcIgnite(ts) >= ts.Health && menu_.Item("cui").GetValue<bool>())
                 ObjectManager.Player.Spellbook.CastSpell(igniteslot_, ts);
         }
         private static float CalcIgnite(Obj_AI_Hero ts)
@@ -225,6 +231,9 @@ namespace EveleyLux
         {
             switch (orbwalker_.ActiveMode)
             {
+                case Orbwalking.OrbwalkingMode.Combo:
+                    Combo();
+                    break;
                 case Orbwalking.OrbwalkingMode.Mixed:
                     Harass();
                     break;
