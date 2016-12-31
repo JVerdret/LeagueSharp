@@ -79,6 +79,7 @@ namespace EveleyLux
             harass.AddItem(new MenuItem("hqfu", "Use Q on fear").SetValue(false));
             harass.AddItem(new MenuItem("hqfc", "Use Q on charm").SetValue(false));
             harass.AddItem(new MenuItem("heu", "Use E").SetValue(true));
+            harass.AddItem(new MenuItem("hmana", "Min Mana").SetValue(new Slider(30, 100, 0)));
             drawing.AddItem(new MenuItem("qdr", "Q range").SetValue(new Circle()));
             drawing.AddItem(new MenuItem("wdr", "W range").SetValue(new Circle()));
             drawing.AddItem(new MenuItem("edr", "E range").SetValue(new Circle()));
@@ -148,16 +149,17 @@ namespace EveleyLux
             var qpred = q_.GetPrediction(ts);
             var qcoll = q_.GetCollision(ObjectManager.Player.ServerPosition.To2D(), new List<Vector2> { qpred.CastPosition.To2D() });
             var mincoll = qcoll.Where(x => !(x is Obj_AI_Hero)).Count(x => x.IsMinion);
+            var hamana = menu_.Item("hmana").GetValue<Slider>().Value;
             if (ts == null || ts.IsInvulnerable)
                 return;
-            if (e_.IsReady() && ts.IsValidTarget(r_.Range) && menu_.Item("heu").GetValue<bool>())
+            if (e_.IsReady() && ts.IsValidTarget(r_.Range) && menu_.Item("heu").GetValue<bool>() && ObjectManager.Player.ManaPercent >= hamana)
                 harassElogic();
-            if (ts.IsValidTarget(q_.Range) && mincoll <= 1 && menu_.Item("hqu").GetValue<bool>() && qpred.Hitchance >= HitChance.VeryHigh
+            if (ts.IsValidTarget(q_.Range) && mincoll <= 1 && menu_.Item("hqu").GetValue<bool>() && qpred.Hitchance >= HitChance.VeryHigh && ObjectManager.Player.ManaPercent >= hamana
                 && (ts.HasBuffOfType(BuffType.Slow) || ts.HasBuffOfType(BuffType.Stun) || ts.HasBuffOfType(BuffType.Snare) || ts.HasBuffOfType(BuffType.Knockup) || ts.HasBuffOfType(BuffType.Suppression) || ts.HasBuffOfType(BuffType.Fear) || ts.HasBuffOfType(BuffType.Charm)))
                 q_.Cast(ts);
             if (menu_.Item("hqsu").GetValue<bool>())
                 return;
-            if (ts.IsValidTarget(q_.Range) && mincoll <= 1 && menu_.Item("hqu").GetValue<bool>() && qpred.Hitchance >= HitChance.VeryHigh)
+            if (ts.IsValidTarget(q_.Range) && mincoll <= 1 && menu_.Item("hqu").GetValue<bool>() && qpred.Hitchance >= HitChance.VeryHigh && ObjectManager.Player.ManaPercent >= hamana)
                 q_.Cast(ts);
         }
         private static void harassElogic()
