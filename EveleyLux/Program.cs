@@ -256,6 +256,30 @@ namespace EveleyLux
                 || lgo_ != null && ts.IsValidTarget(r_.Range) && ObjectManager.Player.HasBuff("lichbane") && ObjectManager.Player.Distance(ts.Position) <= Orbwalking.GetRealAutoAttackRange(ObjectManager.Player) && ts.Position.Distance(lgo_.Position) <= e_.Width && r_.IsReady() /*h*/ && ts.IsValidTarget(r_.Range) && rpred.Hitchance >= HitChance.VeryHigh && ts.Health < cdmg + passdmg + lichdmg && ts.HasBuff("LuxLightBindingMis")
                 || lgo_ != null && ts.IsValidTarget(r_.Range) && ObjectManager.Player.HasBuff("lichbane") && ObjectManager.Player.Distance(ts.Position) <= Orbwalking.GetRealAutoAttackRange(ObjectManager.Player) && ts.Position.Distance(lgo_.Position) <= e_.Width && r_.IsReady() && igniteslot_.IsReady() && ts.IsValidTarget(r_.Range) && rpred.Hitchance >= HitChance.VeryHigh && ts.Health < cdmg + passdmg + lichdmg + CalcIgnite(ts) && ts.HasBuff("LuxLightBindingMis"))
                 r_.Cast(ts);
+            if (ts.HasBuff("LuxLightBindingMis") && menu_.Item("crq").GetValue<bool>() && rpred.Hitchance >= HitChance.VeryHigh)
+                r_.Cast(ts);
+            if (ObjectManager.Player.HasBuff("lichbane") && ObjectManager.Player.Distance(ts.Position) < Orbwalking.GetRealAutoAttackRange(ObjectManager.Player) && ((ts.Health < lichdmg) || (ts.HasBuff("luxilluminatingfraulein") && ts.Health < lichdmg + passdmg)))
+                return;
+            if (ts.IsValidTarget(q_.Range) && q_.GetPrediction(ts).Hitchance >= HitChance.VeryHigh && q_.IsReady() && e_.IsReady() && ts.Health < e_.GetDamage(ts) + q_.GetDamage(ts))
+                return;
+            if (ObjectManager.Player.Distance(ts.Position) < e_.Range - 200 && e_.GetDamage(ts) > ts.Health && e_.IsReady() || lgo_ != null && ts.Distance(lgo_.Position) <= e_.Width && ts.Health < e_.GetDamage(ts) || ObjectManager.Player.Distance(ts.Position) < e_.Range - 200 && q_.GetDamage(ts) > ts.Health && q_.IsReady() && q_.GetPrediction(ts).Hitchance >= HitChance.VeryHigh || ObjectManager.Player.Distance(ts.Position) < Orbwalking.GetRealAutoAttackRange(ObjectManager.Player) && ObjectManager.Player.GetAutoAttackDamage(ts) * 2 > ts.Health)
+                return;
+            if (lgo_ != null && ts.Distance(lgo_.Position) <= e_.Width && ts.Health < e_.GetDamage(ts) || ts.HasBuff("LuxLightBindingMis") && ts.Health < passaadmg && ObjectManager.Player.Distance(ts.Position) <= Orbwalking.GetRealAutoAttackRange(ObjectManager.Player) && ts.HasBuff("luxilluminatingfraulein"))
+                return;
+            if (ts.IsValidTarget(r_.Range) && r_.IsReady() && menu_.Item("craoeu").GetValue<bool>() && rpred.Hitchance >= HitChance.VeryHigh && ObjectManager.Player.Distance(ts.Position) <= e_.Range && ts.IsValidTarget(r_.Range) && !e_.IsReady())
+                r_.CastIfWillHit(ts, menu_.Item("crehc").GetValue<Slider>().Value, menu_.Item("packetcast").GetValue<bool>());
+            else if ((ts.IsValidTarget(r_.Range) && r_.IsReady() && menu_.Item("craoeu").GetValue<bool>() && rpred.Hitchance >= HitChance.VeryHigh && ObjectManager.Player.Distance(ts.Position) <= e_.Range && ts.IsValidTarget(r_.Range)))
+                    r_.CastIfWillHit(ts, menu_.Item("crehc").GetValue<Slider>().Value, menu_.Item("packetcast").GetValue<bool>());
+            if (ts.Health < rdmg - 100 + (3 * ObjectManager.Player.Level) && ts.Position.CountAlliesInRange(650) >= 1)
+                return;
+            if (ts.IsValidTarget(r_.Range) && rpred.Hitchance >= HitChance.VeryHigh && menu_.Item("cru").GetValue<bool>() && ts.HasBuff("luxilluminatingfraulein") && ts.Health < rpdmg && ((ObjectManager.Player.Distance(ts.Position) >= 100) || (ts.HasBuff("LuxLightBindingMis"))))
+                r_.Cast(ts);
+            if (ts.IsValidTarget(r_.Range) && menu_.Item("cru").GetValue<bool>() && rpred.Hitchance >= HitChance.VeryHigh && ts.Health < rdmg && ((ObjectManager.Player.Distance(ts.Position) >= 100) || (ts.HasBuff("LuxLightBindingMis"))))
+                r_.Cast(ts);
+            if ((ObjectManager.Player.Distance(ts.Position) < 600 && ((e_.GetDamage(ts) > ts.Health && e_.IsReady()) || (q_.GetDamage(ts) > ts.Health && q_.IsReady()) || (ts.Health < ObjectManager.Player.GetAutoAttackDamage(ts) * 2))) || lgo_ != null && ts.Distance(lgo_.Position) <= e_.Width && ts.Health < e_.GetDamage(ts))
+                return;
+            if ((ObjectManager.Player.Distance(ts.Position) < 600 && rpidmg >= ts.Health && menu_.Item("cui").GetValue<bool>() && r_.IsReady() && igniteslot_.IsReady()))
+                ObjectManager.Player.Spellbook.CastSpell(igniteslot_, ts);
         }
         private static void Game_OnGameUpdate(EventArgs args)
         {
@@ -263,6 +287,7 @@ namespace EveleyLux
             {
                 case Orbwalking.OrbwalkingMode.Combo:
                     Combo();
+                    Rlogic();
                     break;
                 case Orbwalking.OrbwalkingMode.Mixed:
                     Harass();
