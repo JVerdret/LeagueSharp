@@ -309,6 +309,15 @@ namespace EveleyLux
             if (r_.IsReady() && ts.IsValidTarget(r_.Range))
                 r_.Cast(ts);
         }
+        private static void Aspells()
+        {
+            var ts = TargetSelector.GetTarget(q_.Range, TargetSelector.DamageType.Magical);
+            if (ts == null || ts.IsInvulnerable)
+                return;
+            if (q_.IsReady() && ts.IsValidTarget(q_.Range) && q_.GetPrediction(ts).Hitchance >= HitChance.VeryHigh)
+                if (ts.HasBuffOfType(BuffType.Snare) || ts.HasBuffOfType(BuffType.Suppression) || ts.HasBuffOfType(BuffType.Taunt) || ts.HasBuffOfType(BuffType.Stun) || ts.HasBuffOfType(BuffType.Charm) || ts.HasBuffOfType(BuffType.Fear))
+                    q_.Cast(ts);
+        }
         private static void Game_OnGameUpdate(EventArgs args)
         {
             switch (orbwalker_.ActiveMode)
@@ -332,6 +341,8 @@ namespace EveleyLux
                 Harass();
             if (menu_.Item("semir").GetValue<KeyBind>().Active)
                 SemiR();
+            if (menu_.Item("autoq").GetValue<bool>())
+                Aspells();
         }
     }
 }
