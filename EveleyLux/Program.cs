@@ -301,6 +301,14 @@ namespace EveleyLux
             if (lgo_ != null)
                 e_.Cast();
         }
+        private static void SemiR()
+        {
+            var ts = TargetSelector.GetTarget(r_.Range, TargetSelector.DamageType.Magical);
+            if (ts == null)
+                return;
+            if (r_.IsReady() && ts.IsValidTarget(r_.Range))
+                r_.Cast(ts);
+        }
         private static void Game_OnGameUpdate(EventArgs args)
         {
             switch (orbwalker_.ActiveMode)
@@ -322,6 +330,8 @@ namespace EveleyLux
             }
             if (menu_.Item("autoh").GetValue<KeyBind>().Active)
                 Harass();
+            if (menu_.Item("semir").GetValue<KeyBind>().Active)
+                SemiR();
         }
     }
 }
