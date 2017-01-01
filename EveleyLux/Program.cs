@@ -318,6 +318,19 @@ namespace EveleyLux
                 if (ts.HasBuffOfType(BuffType.Snare) || ts.HasBuffOfType(BuffType.Suppression) || ts.HasBuffOfType(BuffType.Taunt) || ts.HasBuffOfType(BuffType.Stun) || ts.HasBuffOfType(BuffType.Charm) || ts.HasBuffOfType(BuffType.Fear))
                     q_.Cast(ts);
         }
+        private static void emanager()
+        {
+            var ts = TargetSelector.GetTarget(r_.Range, TargetSelector.DamageType.Magical);
+            if (ts == null)
+                return;
+            if (lgo_ != null && lgo_.Position.CountEnemiesInRange(e_.Width) >= 2)
+                e_.Cast();
+            if (lgo_ != null && lgo_.Position.CountEnemiesInRange(e_.Width) >= 1 && (ts.Position.CountEnemiesInRange(500) >= 2 || ObjectManager.Player.Distance(ts.Position) >= Orbwalking.GetRealAutoAttackRange(ObjectManager.Player)))
+                e_.Cast();
+            if (ts.HasBuff("luxilluminatingfraulein") && ts.HasBuff("LuxLightBindingMis") && ObjectManager.Player.Distance(ts.Position) <= Orbwalking.GetRealAutoAttackRange(ObjectManager.Player))
+                e_.Cast();
+
+        }
         private static void Game_OnGameUpdate(EventArgs args)
         {
             switch (orbwalker_.ActiveMode)
@@ -343,6 +356,8 @@ namespace EveleyLux
                 SemiR();
             if (menu_.Item("autoq").GetValue<bool>())
                 Aspells();
+            if (e_.IsReady())
+                emanager();
         }
     }
 }
