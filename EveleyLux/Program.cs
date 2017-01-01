@@ -83,7 +83,7 @@ namespace EveleyLux
             harass.AddItem(new MenuItem("hmana", "Min Mana").SetValue(new Slider(30, 100, 0)));
             jungleclear.AddItem(new MenuItem("jqu", "Use Q").SetValue(true));
             jungleclear.AddItem(new MenuItem("jeu", "Use E").SetValue(true));
-            jungleclear.AddItem(new MenuItem("jmana" "Min mana").SetValue(new Slider(30, 100, 0)));
+            jungleclear.AddItem(new MenuItem("jmana", "Min mana").SetValue(new Slider(30, 100, 0)));
             drawing.AddItem(new MenuItem("qdr", "Q range").SetValue(new Circle()));
             drawing.AddItem(new MenuItem("wdr", "W range").SetValue(new Circle()));
             drawing.AddItem(new MenuItem("edr", "E range").SetValue(new Circle()));
