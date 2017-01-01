@@ -287,6 +287,20 @@ namespace EveleyLux
             if ((ObjectManager.Player.Distance(ts.Position) < 600 && rpidmg >= ts.Health && menu_.Item("cui").GetValue<bool>() && r_.IsReady() && igniteslot_.IsReady()))
                 ObjectManager.Player.Spellbook.CastSpell(igniteslot_, ts);
         }
+        private static void JungleClear()
+        {
+            var jmana = menu_.Item("jmana").GetValue<Slider>().Value;
+            var allminq = MinionManager.GetMinions(ObjectManager.Player.ServerPosition, q_.Range + q_.Width, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth);
+            var allmine = MinionManager.GetMinions(ObjectManager.Player.ServerPosition, e_.Range + e_.Width, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth);
+            var qpos = q_.GetLineFarmLocation(allminq, q_.Width);
+            var epos = e_.GetCircularFarmLocation(allmine, e_.Width);
+            if (qpos.MinionsHit >= 1 && menu_.Item("jqu").GetValue<bool>() && ObjectManager.Player.ManaPercent >= jmana)
+                q_.Cast(qpos.Position);
+            if (epos.MinionsHit >= 1 && menu_.Item("jeu").GetValue<bool>() && ObjectManager.Player.ManaPercent >= jmana)
+                e_.Cast(epos.Position);
+            if (lgo_ != null)
+                e_.Cast();
+        }
         private static void Game_OnGameUpdate(EventArgs args)
         {
             switch (orbwalker_.ActiveMode)
@@ -300,6 +314,7 @@ namespace EveleyLux
                     break;
                 case Orbwalking.OrbwalkingMode.LaneClear:
                     LaneClear();
+                    JungleClear();
                     break;
                 case Orbwalking.OrbwalkingMode.LastHit:
                     LastHit();
