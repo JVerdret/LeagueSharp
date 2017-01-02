@@ -345,6 +345,12 @@ namespace EveleyLux
             var Red = ObjectManager.Get<Obj_AI_Minion>().Where(x => x.BaseSkinName == "SRU_Red").Where(x => ObjectManager.Player.GetSpellDamage(x, SpellSlot.R) > x.Health).FirstOrDefault(x => (x.IsAlly) || (x.IsEnemy));
             if (menu_.Item("jsb").GetValue<bool>() && Nashor != null)
                 r_.Cast(Nashor);
+            if (menu_.Item("jsd").GetValue<bool>() && Drake != null)
+                r_.Cast(Drake);
+            if (menu_.Item("jsr").GetValue<bool>() && Red != null)
+                r_.Cast(Red);
+            if (menu_.Item("jsbl").GetValue<bool>() && Blue != null)
+                r_.Cast(Blue);
         }
         private static void Game_OnGameUpdate(EventArgs args)
         {
@@ -373,6 +379,8 @@ namespace EveleyLux
                 Aspells();
             if (e_.IsReady())
                 emanager();
+            if menu_.Item("autoq").GetValue<bool>())
+                JSteal();
         }
     }
 }
