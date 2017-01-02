@@ -15,7 +15,6 @@ namespace EveleyLux
         public static SpellSlot igniteslot_;
         //public static SpellSlot barrierslot_; need to find name
         public static Orbwalking.Orbwalker orbwalker_;
-        //public static Vector3 castpos; Usefull for later i think
         public static GameObject lgo_;
         static void Main(string[] args)
         {
@@ -54,6 +53,7 @@ namespace EveleyLux
             var harass = menu_.AddSubMenu(new Menu("Harass", "Harass"));
             var jungleclear = menu_.AddSubMenu(new Menu("Jumgleclear", "Jungleclear"));
             var drawing = menu_.AddSubMenu(new Menu("Drawing", "Drawing"));
+            var junglesteal = menu_.AddSubMenu(new Menu("Jumglesteal", "Jungleteal"));
             combo.SubMenu("Q Settings").AddItem(new MenuItem("cqu", "Use Q").SetValue(true));
             combo.SubMenu("Q Settings").AddItem(new MenuItem("autoq", "Auto Q if cc").SetValue(true));
             combo.SubMenu("W Settings").AddItem(new MenuItem("cwu", "Use W").SetValue(true));
@@ -84,6 +84,10 @@ namespace EveleyLux
             jungleclear.AddItem(new MenuItem("jqu", "Use Q").SetValue(true));
             jungleclear.AddItem(new MenuItem("jeu", "Use E").SetValue(true));
             jungleclear.AddItem(new MenuItem("jmana", "Min mana").SetValue(new Slider(30, 100, 0)));
+            junglesteal.AddItem(new MenuItem("jsb","Steal Baron").SetValue(true));
+            junglesteal.AddItem(new MenuItem("jsd", "Steal Drake").SetValue(true));
+            junglesteal.AddItem(new MenuItem("jsr", "Steal Red").SetValue(true));
+            junglesteal.AddItem(new MenuItem("jsbl", "Steal Blue").SetValue(true));
             drawing.AddItem(new MenuItem("qdr", "Q range").SetValue(new Circle()));
             drawing.AddItem(new MenuItem("wdr", "W range").SetValue(new Circle()));
             drawing.AddItem(new MenuItem("edr", "E range").SetValue(new Circle()));
@@ -330,6 +334,15 @@ namespace EveleyLux
             if (ts.HasBuff("luxilluminatingfraulein") && ts.HasBuff("LuxLightBindingMis") && ObjectManager.Player.Distance(ts.Position) <= Orbwalking.GetRealAutoAttackRange(ObjectManager.Player))
                 e_.Cast();
 
+        }
+        private static void JSteal()
+        {
+            if (!r_.IsReady())
+                return;
+            var Nashor = ObjectManager.Get<Obj_AI_Minion>().Where(x => x.BaseSkinName == "SRU_Baron").Where(x => ObjectManager.Player.GetSpellDamage(x, SpellSlot.R) > x.Health).FirstOrDefault(x => (x.IsAlly) || (x.IsEnemy));
+            var Drake = ObjectManager.Get<Obj_AI_Minion>().Where(x => x.BaseSkinName == "SRU_Dragon").Where(x => ObjectManager.Player.GetSpellDamage(x, SpellSlot.R) > x.Health).FirstOrDefault(x => (x.IsAlly) || (x.IsEnemy));
+            var Blue = ObjectManager.Get<Obj_AI_Minion>().Where(x => x.BaseSkinName == "SRU_Blue").Where(x => ObjectManager.Player.GetSpellDamage(x, SpellSlot.R) > x.Health).FirstOrDefault(x => (x.IsAlly) || (x.IsEnemy));
+            var Red = ObjectManager.Get<Obj_AI_Minion>().Where(x => x.BaseSkinName == "SRU_Red").Where(x => ObjectManager.Player.GetSpellDamage(x, SpellSlot.R) > x.Health).FirstOrDefault(x => (x.IsAlly) || (x.IsEnemy));
         }
         private static void Game_OnGameUpdate(EventArgs args)
         {
