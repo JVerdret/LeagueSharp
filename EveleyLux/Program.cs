@@ -84,6 +84,7 @@ namespace EveleyLux
             jungleclear.AddItem(new MenuItem("jqu", "Use Q").SetValue(true));
             jungleclear.AddItem(new MenuItem("jeu", "Use E").SetValue(true));
             jungleclear.AddItem(new MenuItem("jmana", "Min mana").SetValue(new Slider(30, 100, 0)));
+            junglesteal.AddItemnew MenuItem("jst", "Activate Junglesteal").SetValue(new KeyBind('K', KeyBindType.Toggle)));
             junglesteal.AddItem(new MenuItem("jsb","Steal Baron").SetValue(true));
             junglesteal.AddItem(new MenuItem("jsd", "Steal Drake").SetValue(true));
             junglesteal.AddItem(new MenuItem("jsr", "Steal Red").SetValue(true));
@@ -379,7 +380,7 @@ namespace EveleyLux
                 Aspells();
             if (e_.IsReady())
                 emanager();
-            if menu_.Item("autoq").GetValue<bool>())
+            if menu_.Item("jst").GetValue<bool>())
                 JSteal();
         }
     }
