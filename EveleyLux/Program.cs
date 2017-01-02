@@ -343,6 +343,8 @@ namespace EveleyLux
             var Drake = ObjectManager.Get<Obj_AI_Minion>().Where(x => x.BaseSkinName == "SRU_Dragon").Where(x => ObjectManager.Player.GetSpellDamage(x, SpellSlot.R) > x.Health).FirstOrDefault(x => (x.IsAlly) || (x.IsEnemy));
             var Blue = ObjectManager.Get<Obj_AI_Minion>().Where(x => x.BaseSkinName == "SRU_Blue").Where(x => ObjectManager.Player.GetSpellDamage(x, SpellSlot.R) > x.Health).FirstOrDefault(x => (x.IsAlly) || (x.IsEnemy));
             var Red = ObjectManager.Get<Obj_AI_Minion>().Where(x => x.BaseSkinName == "SRU_Red").Where(x => ObjectManager.Player.GetSpellDamage(x, SpellSlot.R) > x.Health).FirstOrDefault(x => (x.IsAlly) || (x.IsEnemy));
+            if (menu_.Item("jsb").GetValue<bool>() && Nashor != null)
+                r_.Cast(Nashor);
         }
         private static void Game_OnGameUpdate(EventArgs args)
         {
