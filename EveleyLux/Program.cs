@@ -13,7 +13,7 @@ namespace EveleyLux
         public static Spell q_, w_, e_, r_;
         public static Menu menu_;
         public static SpellSlot igniteslot_;
-        //public static SpellSlot barrierslot_; need to find name
+        // static SpellSlot barrierslot_; need to find name
         public static Orbwalking.Orbwalker orbwalker_;
         public static GameObject lgo_;
         static void Main(string[] args)
@@ -53,7 +53,8 @@ namespace EveleyLux
             var harass = menu_.AddSubMenu(new Menu("Harass", "Harass"));
             var jungleclear = menu_.AddSubMenu(new Menu("Jumgleclear", "Jungleclear"));
             var drawing = menu_.AddSubMenu(new Menu("Drawing", "Drawing"));
-            var junglesteal = menu_.AddSubMenu(new Menu("Jumglesteal", "Jungleteal"));
+            var junglesteal = menu_.AddSubMenu(new Menu("Junglesteal", "Jungleteal"));
+            var killsteal = menu_.AddSubMenu(new Menu("KS", "KS"));
             combo.SubMenu("Q Settings").AddItem(new MenuItem("cqu", "Use Q").SetValue(true));
             combo.SubMenu("Q Settings").AddItem(new MenuItem("autoq", "Auto Q if cc").SetValue(true));
             combo.SubMenu("W Settings").AddItem(new MenuItem("cwu", "Use W").SetValue(true));
@@ -89,6 +90,11 @@ namespace EveleyLux
             junglesteal.AddItem(new MenuItem("jsd", "Steal Drake").SetValue(true));
             junglesteal.AddItem(new MenuItem("jsr", "Steal Red").SetValue(true));
             junglesteal.AddItem(new MenuItem("jsbl", "Steal Blue").SetValue(true));
+            killsteal.AddItem(new MenuItem("ks", "KS").SetValue(true));
+            killsteal.AddItem(new MenuItem("ksi", "Use Ignite").SetValue(true));
+            killsteal.AddItem(new MenuItem("ksqu", "Use Q").SetValue(true));
+            killsteal.AddItem(new MenuItem("kseu", "Use E").SetValue(true));
+            killsteal.AddItem(new MenuItem("ksru", "Use R").SetValue(true));
             drawing.AddItem(new MenuItem("qdr", "Q range").SetValue(new Circle()));
             drawing.AddItem(new MenuItem("wdr", "W range").SetValue(new Circle()));
             drawing.AddItem(new MenuItem("edr", "E range").SetValue(new Circle()));
