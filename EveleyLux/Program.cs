@@ -68,8 +68,8 @@ namespace EveleyLux
             combo.SubMenu("R Settings").AddItem(new MenuItem("craoeu", "Use Special R").SetValue(false));
             combo.SubMenu("R Settings").AddItem(new MenuItem("crehc", "Ennemy Hits").SetValue(new Slider(3, 5, 1)));
             combo.SubMenu("R Settings").AddItem(new MenuItem("crq", "Auto R if Q").SetValue(false));
-            summ.SubMenu("Summoners Settings").AddItem(new MenuItem("cui", "Use Ignite").SetValue(true));
-            summ.SubMenu("Summoners Settings").AddItem(new MenuItem("cub", "Use Barrier if targeted").SetValue(true));
+            summ.AddItem(new MenuItem("cui", "Use Ignite").SetValue(true));
+            summ.AddItem(new MenuItem("cub", "Use Barrier if targeted").SetValue(true));
             laneclear.AddItem(new MenuItem("lqu", "Use Q").SetValue(true));
             laneclear.AddItem(new MenuItem("lwu", "Use W with very low HP").SetValue(false));
             laneclear.AddItem(new MenuItem("leu", "Use E").SetValue(true));
