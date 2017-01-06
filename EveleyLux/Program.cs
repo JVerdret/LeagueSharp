@@ -57,6 +57,7 @@ namespace EveleyLux
             var drawing = menu_.AddSubMenu(new Menu("Drawing", "Drawing"));
             var junglesteal = menu_.AddSubMenu(new Menu("Junglesteal", "Jungleteal"));
             var killsteal = menu_.AddSubMenu(new Menu("KS", "KS"));
+            var cred = menu_.AddSubMenu(new Menu("Credits", "Credits"));
             combo.SubMenu("Q Settings").AddItem(new MenuItem("cqu", "Use Q").SetValue(true));
             combo.SubMenu("Q Settings").AddItem(new MenuItem("autoq", "Auto Q if cc").SetValue(true));
             combo.SubMenu("W Settings").AddItem(new MenuItem("cwu", "Use W").SetValue(true));
@@ -91,6 +92,7 @@ namespace EveleyLux
             junglesteal.AddItem(new MenuItem("jsr", "Steal Red").SetValue(true));
             junglesteal.AddItem(new MenuItem("jsbl", "Steal Blue").SetValue(true));
             killsteal.AddItem(new MenuItem("ks", "KS").SetValue(true));
+            killsteal.AddItem(new MenuItem("kui", "Use Ignite"));
             killsteal.AddItem(new MenuItem("ksru", "Use R").SetValue(true));
             drawing.AddItem(new MenuItem("qdr", "Q range").SetValue(new Circle()));
             drawing.AddItem(new MenuItem("wdr", "W range").SetValue(new Circle()));
@@ -361,9 +363,22 @@ namespace EveleyLux
             if (menu_.Item("jsbl").GetValue<bool>() && Blue != null)
                 r_.Cast(Blue);
         }
-        public static void AutoLevel (int[] levels)
+        private static void KS()
         {
+            foreach (var mechant in ObjectManager.Get<Obj_AI_Hero>().Where(x => x.IsValidTarget(r_.Range)).Where(x => !x.IsZombie).Where(x => !x.IsDead))
+            {
+                igniteslot_ = ObjectManager.Player.GetSpellSlot("SummonerDot");
+                var qd = q_.GetDamage(mechant);
+                var qp = q_.GetPrediction(mechant);
+                var ed = e_.GetDamage(mechant);
+                var ep = e_.GetPrediction(mechant);
+                var rd = r_.GetDamage(mechant);
+                var rp = r_.GetPrediction(mechant);
+                var pd = ObjectManager.Player.CalcDamage(mechant, Damage.DamageType.Magical, 10 + (8 * ObjectManager.Player.Level) + 0.2 * ObjectManager.Player.FlatMagicDamageMod);
+                var rpd = rd + pd;
+                //if (ObjectManager.Player.Distance(mechant.Position))
 
+            }
         }
         private static void Game_OnGameUpdate(EventArgs args)
         {
