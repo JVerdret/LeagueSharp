@@ -20,7 +20,7 @@ namespace EveleyLux
         {
             if (ObjectManager.Player.BaseSkinName == "Lux")
             {
-                Game.PrintChat("EveleyLux Loaded");
+                Game.PrintChat("<font color=\"#ff0000\">EveleyLux Loaded</font>");
                 CustomEvents.Game.OnGameLoad += Game_OnGameLoad;
             }
             else
@@ -32,7 +32,7 @@ namespace EveleyLux
         }
         private static void Game_OnGameLoad(EventArgs args)
         {
-            Game.PrintChat("Let's make them disappear !");
+            Game.PrintChat("<font color=\"#ff0000\">Let's make them disappear !</font>");
             q_ = new Spell(SpellSlot.Q, 1175f);
             w_ = new Spell(SpellSlot.W, 1075f);
             e_ = new Spell(SpellSlot.E, 1100f);
@@ -376,7 +376,8 @@ namespace EveleyLux
                 var rp = r_.GetPrediction(mechant);
                 var pd = ObjectManager.Player.CalcDamage(mechant, Damage.DamageType.Magical, 10 + (8 * ObjectManager.Player.Level) + 0.2 * ObjectManager.Player.FlatMagicDamageMod);
                 var rpd = rd + pd;
-                //if (ObjectManager.Player.Distance(mechant.Position))
+                if (ObjectManager.Player.Distance(mechant.Position) < 600 && CalcIgnite(mechant) >= mechant.Health && ObjectManager.Player.HealthPercent <= 25 && menu_.Item("kui").GetValue<bool>())
+                    ObjectManager.Player.Spellbook.CastSpell(igniteslot_, mechant);
 
             }
         }
