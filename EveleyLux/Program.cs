@@ -50,6 +50,7 @@ namespace EveleyLux
             orbwalker_ = new Orbwalking.Orbwalker(menu_.AddSubMenu(new Menu("Orbwalker", "Orbwalker")));
             TargetSelector.AddToMenu(menu_.AddSubMenu(new Menu("Target Selector", "Target Selector")));
             var combo = menu_.AddSubMenu(new Menu("Combo", "Combo"));
+            var summ = menu_.AddSubMenu(new Menu("Summoners", "Summoners"));
             var laneclear = menu_.AddSubMenu(new Menu("Laneclear", "Laneclear"));
             var harass = menu_.AddSubMenu(new Menu("Harass", "Harass"));
             var jungleclear = menu_.AddSubMenu(new Menu("Jumgleclear", "Jungleclear"));
@@ -66,10 +67,8 @@ namespace EveleyLux
             combo.SubMenu("R Settings").AddItem(new MenuItem("craoeu", "Use Special R").SetValue(false));
             combo.SubMenu("R Settings").AddItem(new MenuItem("crehc", "Ennemy Hits").SetValue(new Slider(3, 5, 1)));
             combo.SubMenu("R Settings").AddItem(new MenuItem("crq", "Auto R if Q").SetValue(false));
-            combo.SubMenu("Summoners Settings").AddItem(new MenuItem("cui", "Use Ignite").SetValue(true));
-            combo.SubMenu("Summoners Settings").AddItem(new MenuItem("cie", "Use Exhaust").SetValue(true));
-            combo.SubMenu("Summoners Settings").AddItem(new MenuItem("cub", "Use Barrier").SetValue(true));
-            combo.SubMenu("Summoners Settings").AddItem(new MenuItem("cuh", "Use Heal").SetValue(true));
+            summ.SubMenu("Summoners Settings").AddItem(new MenuItem("cui", "Use Ignite").SetValue(true));
+            summ.SubMenu("Summoners Settings").AddItem(new MenuItem("cub", "Use Barrier if targeted").SetValue(true));
             laneclear.AddItem(new MenuItem("lqu", "Use Q").SetValue(true));
             laneclear.AddItem(new MenuItem("lwu", "Use W with very low HP").SetValue(false));
             laneclear.AddItem(new MenuItem("leu", "Use E").SetValue(true));
