@@ -13,7 +13,7 @@ namespace EveleyLux
         public static Spell q_, w_, e_, r_;
         public static Menu menu_;
         public static SpellSlot igniteslot_;
-        // static SpellSlot barrierslot_; need to find name
+        public static SpellSlot barrierslot_;
         public static Orbwalking.Orbwalker orbwalker_;
         public static GameObject lgo_;
         static void Main(string[] args)
@@ -43,6 +43,7 @@ namespace EveleyLux
             e_.SetSkillshot(0.25f, 200f, 950f, false, SkillshotType.SkillshotCircle);
             r_.SetSkillshot(1f, 190f, float.MaxValue, false, SkillshotType.SkillshotLine);
             igniteslot_ = ObjectManager.Player.GetSpellSlot("SummonerDot");
+            barrierslot_ = ObjectManager.Player.GetSpellSlot("summonerbarrier");
 
 
             (menu_ = new Menu("EveleyLux", "Lux", true)).AddToMainMenu();
@@ -67,7 +68,7 @@ namespace EveleyLux
             combo.SubMenu("R Settings").AddItem(new MenuItem("crq", "Auto R if Q").SetValue(false));
             combo.SubMenu("Summoners Settings").AddItem(new MenuItem("cui", "Use Ignite").SetValue(true));
             combo.SubMenu("Summoners Settings").AddItem(new MenuItem("cie", "Use Exhaust").SetValue(true));
-            combo.SubMenu("Summoners Settings").AddItem(new MenuItem("cub", "Use Ignite").SetValue(true));
+            combo.SubMenu("Summoners Settings").AddItem(new MenuItem("cub", "Use Barrier").SetValue(true));
             combo.SubMenu("Summoners Settings").AddItem(new MenuItem("cuh", "Use Heal").SetValue(true));
             laneclear.AddItem(new MenuItem("lqu", "Use Q").SetValue(true));
             laneclear.AddItem(new MenuItem("lwu", "Use W with very low HP").SetValue(false));
@@ -91,9 +92,6 @@ namespace EveleyLux
             junglesteal.AddItem(new MenuItem("jsr", "Steal Red").SetValue(true));
             junglesteal.AddItem(new MenuItem("jsbl", "Steal Blue").SetValue(true));
             killsteal.AddItem(new MenuItem("ks", "KS").SetValue(true));
-            killsteal.AddItem(new MenuItem("ksi", "Use Ignite").SetValue(true));
-            killsteal.AddItem(new MenuItem("ksqu", "Use Q").SetValue(true));
-            killsteal.AddItem(new MenuItem("kseu", "Use E").SetValue(true));
             killsteal.AddItem(new MenuItem("ksru", "Use R").SetValue(true));
             drawing.AddItem(new MenuItem("qdr", "Q range").SetValue(new Circle()));
             drawing.AddItem(new MenuItem("wdr", "W range").SetValue(new Circle()));
@@ -208,10 +206,15 @@ namespace EveleyLux
         }
         public static void OnProcessSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
-            if ((!w_.IsReady()) || (!args.Target.IsMe || sender.IsAlly || sender.IsMinion || sender == null))
+            barrierslot_ = ObjectManager.Player.GetSpellSlot("summonerbarrier");
+            if ((!args.Target.IsMe || sender.IsAlly || sender.IsMinion || sender == null))
                 return;
             if (w_.IsReady() && menu_.Item("autow").GetValue<bool>())
+            {
                 w_.Cast(Game.CursorPos);
+            }
+            if (ObjectManager.Player.Spellbook.CanUseSpell(barrierslot_) == SpellState.Ready && ObjectManager.Player.HealthPercent <= 10 && menu_.Item("cub").GetValue<bool>())
+                ObjectManager.Player.Spellbook.CastSpell(barrierslot_);
         }
 
         private static void Combo()
@@ -358,6 +361,10 @@ namespace EveleyLux
                 r_.Cast(Red);
             if (menu_.Item("jsbl").GetValue<bool>() && Blue != null)
                 r_.Cast(Blue);
+        }
+        public static void AutoLevel (int[] levels)
+        {
+
         }
         private static void Game_OnGameUpdate(EventArgs args)
         {
