@@ -54,9 +54,9 @@ namespace EveleyLux
             var laneclear = menu_.AddSubMenu(new Menu("Laneclear", "Laneclear"));
             var harass = menu_.AddSubMenu(new Menu("Harass", "Harass"));
             var jungleclear = menu_.AddSubMenu(new Menu("Jumgleclear", "Jungleclear"));
-            var drawing = menu_.AddSubMenu(new Menu("Drawing", "Drawing"));
             var junglesteal = menu_.AddSubMenu(new Menu("Junglesteal", "Jungleteal"));
             var killsteal = menu_.AddSubMenu(new Menu("KS", "KS"));
+            var drawing = menu_.AddSubMenu(new Menu("Drawing", "Drawing"));
             var cred = menu_.AddSubMenu(new Menu("Credits", "Credits"));
             combo.SubMenu("Q Settings").AddItem(new MenuItem("cqu", "Use Q").SetValue(true));
             combo.SubMenu("Q Settings").AddItem(new MenuItem("autoq", "Auto Q if cc").SetValue(true));
@@ -74,8 +74,6 @@ namespace EveleyLux
             laneclear.AddItem(new MenuItem("lwu", "Use W with very low HP").SetValue(false));
             laneclear.AddItem(new MenuItem("leu", "Use E").SetValue(true));
             laneclear.AddItem(new MenuItem("lru", "Use R").SetValue(false));
-            //laneclear.AddItem(new MenuItem("lquc", "Q Minion Number").SetValue(true));
-            //laneclear.AddItem(new MenuItem("leuc", "E Minion Count").SetValue(true));
             harass.AddItem(new MenuItem("autoh", "AutoHarass Toggle").SetValue(new KeyBind('L', KeyBindType.Toggle)));
             harass.AddItem(new MenuItem("hqu", "Use Q").SetValue(true));
             harass.AddItem(new MenuItem("hqsu", "Use Q only on CC").SetValue(false));
@@ -92,7 +90,7 @@ namespace EveleyLux
             junglesteal.AddItem(new MenuItem("jsr", "Steal Red").SetValue(true));
             junglesteal.AddItem(new MenuItem("jsbl", "Steal Blue").SetValue(true));
             killsteal.AddItem(new MenuItem("ks", "KS").SetValue(true));
-            killsteal.AddItem(new MenuItem("kui", "Use Ignite"));
+            killsteal.AddItem(new MenuItem("kui", "Use Ignite").SetValue(true));
             killsteal.AddItem(new MenuItem("ksru", "Use R").SetValue(true));
             drawing.AddItem(new MenuItem("qdr", "Q range").SetValue(new Circle()));
             drawing.AddItem(new MenuItem("wdr", "W range").SetValue(new Circle()));
