@@ -58,6 +58,7 @@ namespace EveleyLux
             var killsteal = menu_.AddSubMenu(new Menu("KS", "KS"));
             var drawing = menu_.AddSubMenu(new Menu("Drawing", "Drawing"));
             var cred = menu_.AddSubMenu(new Menu("Credits", "Credits"));
+            combo.AddItem(new MenuItem("scks", "Use Smart Kill").SetValue(true));
             combo.SubMenu("Q Settings").AddItem(new MenuItem("cqu", "Use Q").SetValue(true));
             combo.SubMenu("Q Settings").AddItem(new MenuItem("autoq", "Auto Q if cc").SetValue(true));
             combo.SubMenu("W Settings").AddItem(new MenuItem("cwu", "Use W").SetValue(true));
@@ -89,9 +90,11 @@ namespace EveleyLux
             junglesteal.AddItem(new MenuItem("jsd", "Steal Drake").SetValue(true));
             junglesteal.AddItem(new MenuItem("jsr", "Steal Red").SetValue(true));
             junglesteal.AddItem(new MenuItem("jsbl", "Steal Blue").SetValue(true));
-            killsteal.AddItem(new MenuItem("ks", "KS").SetValue(true));
-            killsteal.AddItem(new MenuItem("kui", "Use Ignite").SetValue(true));
-            killsteal.AddItem(new MenuItem("ksru", "Use R").SetValue(true));
+            /*
+             * killsteal.AddItem(new MenuItem("ks", "KS").SetValue(true));
+             * killsteal.AddItem(new MenuItem("kui", "Use Ignite").SetValue(true));
+             * killsteal.AddItem(new MenuItem("ksru", "Use R").SetValue(true));
+            */
             drawing.AddItem(new MenuItem("qdr", "Q range").SetValue(new Circle()));
             drawing.AddItem(new MenuItem("wdr", "W range").SetValue(new Circle()));
             drawing.AddItem(new MenuItem("edr", "E range").SetValue(new Circle()));
